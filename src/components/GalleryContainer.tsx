@@ -4,12 +4,27 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import ImageItemProps from "../types/ImageItemProps";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Input, styled } from "@mui/material";
 
 interface GalleryContainerProps {
-  images: ImageItemProps[];
+  images: Record<number, ImageItemProps>;
+  handleItemTitleClick: (id: number) => void;
 }
 
-export default function GalleryContainer({ images }: GalleryContainerProps) {
+const ImageTitle = styled("p")({
+  lineHeight: 1,
+  overflowWrap: "anywhere",
+  fontSize: 15,
+  cursor: "pointer",
+  "&:hover": {
+    textDecoration: "underline",
+  },
+});
+
+export default function GalleryContainer({
+  images,
+  handleItemTitleClick,
+}: GalleryContainerProps) {
   return (
     <ImageList
       sx={{
@@ -20,28 +35,24 @@ export default function GalleryContainer({ images }: GalleryContainerProps) {
         justifyContent: "center",
       }}
     >
-      {images.map((image) => (
-        <ImageListItem
-          key={image.id}
-          sx={{
-            width: 150,
-            border: "3px solid gray",
-            padding: 1,
-            margin: 1,
-          }}
-        >
-          <LazyLoadImage src={`${image.thumbnailUrl}`} alt={image.title} />
-          <ImageListItemBar
+      {Object.values(images)
+        .slice(0, 2)
+        .map((image) => (
+          <ImageListItem
+            key={image.id}
             sx={{
-              flex: 1,
-              cursor: "pointer",
-              "&:hover": { textDecoration: "underline" },
+              width: 600,
+              border: "3px solid gray",
+              padding: 1,
+              margin: 1,
             }}
-            title={image.title}
-            position="below"
-          />
-        </ImageListItem>
-      ))}
+          >
+            <LazyLoadImage src={`${image.url}`} />
+            <ImageTitle onClick={() => handleItemTitleClick(image.id)}>
+              {image.title}
+            </ImageTitle>
+          </ImageListItem>
+        ))}
     </ImageList>
   );
 }
