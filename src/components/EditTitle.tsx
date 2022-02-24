@@ -21,26 +21,22 @@ const style = {
 };
 
 interface EditTitleProps {
-  isTitleEdit: boolean;
+  open: boolean;
   handleModalClose: (title: string) => void;
-  editedImage: ImageItemProps;
+  imageItem: ImageItemProps;
 }
 
-const EditTitle = ({
-  isTitleEdit,
-  editedImage,
-  handleModalClose,
-}: EditTitleProps) => {
-  const [title, setTitle] = useState(editedImage.title);
+const EditTitle = ({ open, imageItem, handleModalClose }: EditTitleProps) => {
+  const [title, setTitle] = useState(imageItem.title);
   useEffect(() => {
-    setTitle(editedImage.title);
-  }, [editedImage.title]);
+    setTitle(imageItem.title);
+  }, [imageItem.title]);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
   };
   return (
-    <Modal open={isTitleEdit} onClose={() => handleModalClose(title)}>
+    <Modal open={open} onClose={() => handleModalClose(title)}>
       <Box sx={style}>
         <TextField
           value={title}
@@ -54,14 +50,14 @@ const EditTitle = ({
             sx={{ m: 1 }}
             disabled={!title}
             onClick={() => handleModalClose(title)}
-            variant={editedImage.title === title ? "outlined" : "contained"}
+            variant={imageItem.title === title ? "outlined" : "contained"}
             color="success"
           >
             Save
           </Button>
           <Button
             sx={{ m: 1 }}
-            onClick={() => handleModalClose(editedImage.title)}
+            onClick={() => handleModalClose(imageItem.title)}
             variant="outlined"
             color="secondary"
           >

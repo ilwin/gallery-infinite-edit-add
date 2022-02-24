@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { styled } from "@mui/material";
 
 interface GalleryContainerProps {
-  images: Record<number, ImageItemProps>;
+  items: Record<number, ImageItemProps>;
   handleItemTitleClick: (id: number) => void;
 }
 
@@ -21,10 +21,10 @@ const ImageTitle = styled("p")({
 });
 
 export default function GalleryContainer({
-  images,
+  items,
   handleItemTitleClick,
 }: GalleryContainerProps) {
-  const imgList = Object.values(images);
+  const imgList = Object.values(items);
   const portionSize = 10;
   const [offset, setOffset] = useState(0);
   const [imgListPortions, setImgListPortions] = useState<ImageItemProps[]>(

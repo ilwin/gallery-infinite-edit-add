@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import ImageItemProps from "../types/ImageItemProps";
 import { getImages } from "../dataService";
@@ -6,45 +6,48 @@ import GalleryContainer from "./GalleryContainer";
 import EditTitle from "./EditTitle";
 
 const Main = () => {
-  const [images, setImages] = useState<Record<number, ImageItemProps>>(
+  const [items, setItems] = useState<Record<number, ImageItemProps>>(
     {} as Record<number, ImageItemProps>
   );
-  const [isTitleEdit, setIsTitleEdit] = useState(false);
-  const [editedImage, setEditedImage] = useState<ImageItemProps>(
-    {} as ImageItemProps
-  );
+  const [editItemId, setEditItemId] = useState<number | null>(null);
+
   useEffect(() => {
-    getImages().then((result) => setImages(result));
+    getImages().then((result) => setItems(result));
   }, []);
 
   const handleItemTitleClick = (id: number) => {
-    setIsTitleEdit(true);
-    setEditedImage(images[id]);
+    setEditItemId(id);
   };
 
   const handleModalClose = (title: string) => {
-    if (title !== editedImage.title) {
-      setImages({
-        ...images,
-        [editedImage.id]: { ...editedImage, title: title },
+    if (title !== items[editItemId!].title) {
+      console.log({
+        ...items,
+        [editItemId!]: { ...items[editItemId!], title: title },
+      });
+      setItems({
+        ...items,
+        [editItemId!]: { ...items[editItemId!], title: title },
       });
     }
-    setIsTitleEdit(false);
+    setEditItemId(null);
   };
+
+  const hasItems = useMemo(() => Object.keys(items).length, [items]);
 
   return (
     <div>
-      {Object.keys(images).length > 0 && (
+      {hasItems && (
         <GalleryContainer
-          images={images}
+          items={items}
           handleItemTitleClick={handleItemTitleClick}
         />
       )}
-      {editedImage && (
+      {editItemId && (
         <EditTitle
-          isTitleEdit={isTitleEdit}
+          open={true}
           handleModalClose={handleModalClose}
-          editedImage={editedImage}
+          imageItem={items[editItemId]}
         />
       )}
     </div>
