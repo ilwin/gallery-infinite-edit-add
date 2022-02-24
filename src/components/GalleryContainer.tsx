@@ -3,19 +3,22 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ItemProps from "../types/ItemProps";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { styled } from "@mui/material";
+import { styled, Tooltip } from "@mui/material";
 
 interface GalleryContainerProps {
   items: ItemProps[];
   handleItemTitleClick: (id: number) => void;
   fetchMoreData: () => void;
   hasMore: boolean;
+  imgWidth?: number;
+  imgHeight?: number;
 }
 
 const ImageTitle = styled("p")({
   lineHeight: 1,
   overflowWrap: "anywhere",
-  fontSize: 15,
+  fontSize: 20,
+  fontFamily: "fantasy",
   cursor: "pointer",
   "&:hover": {
     textDecoration: "underline",
@@ -27,6 +30,8 @@ export default function GalleryContainer({
   handleItemTitleClick,
   fetchMoreData,
   hasMore,
+  imgWidth = 600,
+  imgHeight = 600,
 }: GalleryContainerProps) {
   return (
     <InfiniteScroll
@@ -48,20 +53,26 @@ export default function GalleryContainer({
       }
     >
       {items.map((image) => (
-        <ImageListItem
-          key={image.id}
-          sx={{
-            width: 600,
-            border: "3px solid gray",
-            padding: 1,
-            margin: 1,
-          }}
-        >
-          <LazyLoadImage src={`${image.url}`} />
-          <ImageTitle onClick={() => handleItemTitleClick(image.id)}>
-            {`${image.id}-${image.title}`}
-          </ImageTitle>
-        </ImageListItem>
+        <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
+          <ImageListItem
+            key={image.id}
+            sx={{
+              width: 600,
+              border: "3px solid gray",
+              padding: 1,
+              margin: 1,
+            }}
+          >
+            <LazyLoadImage
+              src={`${image.url}`}
+              width={imgWidth}
+              height={imgHeight}
+            />
+            <ImageTitle onClick={() => handleItemTitleClick(image.id)}>
+              {image.title}
+            </ImageTitle>
+          </ImageListItem>
+        </Tooltip>
       ))}
     </InfiniteScroll>
   );

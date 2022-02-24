@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,42 +22,81 @@ const style = {
 
 interface EditTitleProps {
   open: boolean;
-  handleModalClose: (title: string) => void;
+  handleModalClose: (item: ItemProps) => void;
   item: ItemProps;
 }
 
-const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
-  const [title, setTitle] = useState(item.title);
-  useEffect(() => {
-    setTitle(item.title);
-  }, [item.title]);
+function isValidURL(string: string) {
+  const res = string.match(
+    /(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  );
+  return res !== null;
+}
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTitle(event.target.value);
+const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
+  const [formInput, setFormInput] = useState<ItemProps>(item);
+  const handleInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const name = evt.target.name;
+    const newValue = evt.target.value;
+    setFormInput({ ...formInput, [name]: newValue });
   };
+
+  const validateOnClose = () => {
+    if (isValidURL(formInput.url) && formInput.title) {
+      handleModalClose(formInput);
+    } else {
+      handleModalClose(item);
+    }
+  };
+
   return (
-    <Modal open={open} onClose={() => handleModalClose(title)}>
-      <Box sx={style}>
+    <Modal open={open} onClose={validateOnClose}>
+      <Box component="form" sx={style}>
         <TextField
-          value={title}
-          onChange={handleChange}
-          label="Edit Title"
-          autoFocus
+          disabled
+          name="id"
+          id="standard-disabled"
+          label="ID"
+          defaultValue={formInput.id}
+          variant="standard"
+          margin="normal"
+        />
+        <TextField
+          id="standard-title"
+          error={!formInput.title}
+          name="title"
+          label="Title"
+          value={formInput.title}
           multiline
+          onChange={handleInput}
+          variant="standard"
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          id="standard-url"
+          error={!isValidURL(formInput.url)}
+          name="url"
+          label="URL"
+          value={formInput.url}
+          multiline
+          variant="standard"
+          onChange={handleInput}
+          margin="normal"
+          fullWidth
         />
         <Box sx={{ display: "flex", justifyContent: "right", mt: 1 }}>
           <Button
             sx={{ m: 1 }}
-            disabled={!title}
-            onClick={() => handleModalClose(title)}
-            variant={item.title === title ? "outlined" : "contained"}
-            color="success"
+            disabled={!formInput.title || !isValidURL(formInput.url)}
+            onClick={() => handleModalClose(formInput)}
+            variant="outlined"
           >
             Save
           </Button>
           <Button
             sx={{ m: 1 }}
-            onClick={() => handleModalClose(item.title)}
+            onClick={() => handleModalClose(item)}
             variant="outlined"
             color="secondary"
           >

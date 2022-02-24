@@ -29,13 +29,11 @@ const Main = () => {
     setEditItemId(id);
   };
 
-  const handleModalClose = (title: string) => {
-    if (title !== items[editItemId!].title) {
-      setItems({
-        ...items,
-        [editItemId!]: { ...items[editItemId!], title: title },
-      });
-    }
+  const handleModalClose = (item: ItemProps) => {
+    setItems({
+      ...items,
+      [item.id]: { ...item },
+    });
     setEditItemId(null);
   };
 
