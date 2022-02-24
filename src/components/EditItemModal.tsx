@@ -26,7 +26,7 @@ interface EditTitleProps {
   item: ItemProps;
 }
 
-const EditTitle = ({ open, item, handleModalClose }: EditTitleProps) => {
+const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
   const [title, setTitle] = useState(item.title);
   useEffect(() => {
     setTitle(item.title);
@@ -69,4 +69,4 @@ const EditTitle = ({ open, item, handleModalClose }: EditTitleProps) => {
   );
 };
 
-export default EditTitle;
+export default EditItemModal;

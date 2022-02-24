@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import ItemProps from "../types/ItemProps";
 import { getImages } from "../dataService";
 import GalleryContainer from "./GalleryContainer";
-import EditTitle from "./EditTitle";
+import EditItemModal from "./EditItemModal";
 
 const Main = () => {
   const [items, setItems] = useState<Record<number, ItemProps>>(
@@ -68,7 +68,7 @@ const Main = () => {
         />
       )}
       {editItemId && (
-        <EditTitle
+        <EditItemModal
           open={true}
           handleModalClose={handleModalClose}
           item={items[editItemId]}
