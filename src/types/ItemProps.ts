@@ -1,4 +1,4 @@
-export default interface ImageItemProps {
+export default interface ItemProps {
   albumId: number;
   id: number;
   title: string;

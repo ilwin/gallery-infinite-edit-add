@@ -1,19 +1,29 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import ImageItemProps from "../types/ImageItemProps";
+import ItemProps from "../types/ItemProps";
 import { getImages } from "../dataService";
 import GalleryContainer from "./GalleryContainer";
 import EditTitle from "./EditTitle";
 
 const Main = () => {
-  const [items, setItems] = useState<Record<number, ImageItemProps>>(
-    {} as Record<number, ImageItemProps>
+  const [items, setItems] = useState<Record<number, ItemProps>>(
+    {} as Record<number, ItemProps>
   );
+  const [visibleItems, setVisibleItems] = useState<ItemProps[]>([]);
+  const onScrollUploadCount = 10;
+  const [offset, setOffset] = useState(0);
   const [editItemId, setEditItemId] = useState<number | null>(null);
+  const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
 
   useEffect(() => {
     getImages().then((result) => setItems(result));
   }, []);
+
+  useEffect(() => {
+    setVisibleItems(
+      Object.values(items).slice(offset, offset + onScrollUploadCount)
+    );
+  }, [items]);
 
   const handleItemTitleClick = (id: number) => {
     setEditItemId(id);
@@ -21,10 +31,6 @@ const Main = () => {
 
   const handleModalClose = (title: string) => {
     if (title !== items[editItemId!].title) {
-      console.log({
-        ...items,
-        [editItemId!]: { ...items[editItemId!], title: title },
-      });
       setItems({
         ...items,
         [editItemId!]: { ...items[editItemId!], title: title },
@@ -33,21 +39,39 @@ const Main = () => {
     setEditItemId(null);
   };
 
-  const hasItems = useMemo(() => Object.keys(items).length, [items]);
+  const hasItems = useMemo(() => Object.keys(items).length > 0, [items]);
+
+  const fetchMoreDataScrolling = () => {
+    const hasMore =
+      visibleItems.length + onScrollUploadCount <= Object.keys(items).length;
+    if (!hasMore) {
+      setHasMoreScrolling(false);
+      return;
+    }
+    const newOffset = offset + onScrollUploadCount;
+    setVisibleItems((visibleItems) =>
+      visibleItems.concat(
+        Object.values(items).slice(newOffset, newOffset + onScrollUploadCount)
+      )
+    );
+    setOffset(newOffset);
+  };
 
   return (
     <div>
       {hasItems && (
         <GalleryContainer
-          items={items}
+          items={visibleItems}
           handleItemTitleClick={handleItemTitleClick}
+          fetchMoreData={fetchMoreDataScrolling}
+          hasMore={hasMoreScrolling}
         />
       )}
       {editItemId && (
         <EditTitle
           open={true}
           handleModalClose={handleModalClose}
-          imageItem={items[editItemId]}
+          item={items[editItemId]}
         />
       )}
     </div>

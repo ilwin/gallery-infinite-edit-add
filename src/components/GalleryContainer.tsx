@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import ImageListItem from "@mui/material/ImageListItem";
-import ImageItemProps from "../types/ImageItemProps";
+import ItemProps from "../types/ItemProps";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { styled } from "@mui/material";
 
 interface GalleryContainerProps {
-  items: Record<number, ImageItemProps>;
+  items: ItemProps[];
   handleItemTitleClick: (id: number) => void;
+  fetchMoreData: () => void;
+  hasMore: boolean;
 }
 
 const ImageTitle = styled("p")({
@@ -23,29 +25,12 @@ const ImageTitle = styled("p")({
 export default function GalleryContainer({
   items,
   handleItemTitleClick,
+  fetchMoreData,
+  hasMore,
 }: GalleryContainerProps) {
-  const imgList = Object.values(items);
-  const portionSize = 10;
-  const [offset, setOffset] = useState(0);
-  const [imgListPortions, setImgListPortions] = useState<ImageItemProps[]>(
-    imgList.slice(offset, offset + portionSize)
-  );
-  const [hasMore, setHasMore] = useState(true);
-
-  const fetchMoreData = () => {
-    if (imgListPortions.length + portionSize >= imgList.length) {
-      setHasMore(false);
-      return;
-    }
-    const newOffset = offset + portionSize;
-    setImgListPortions((prevState) =>
-      prevState.concat(imgList.slice(newOffset, newOffset + portionSize))
-    );
-    setOffset(newOffset);
-  };
   return (
     <InfiniteScroll
-      dataLength={imgListPortions.length}
+      dataLength={items.length}
       next={fetchMoreData}
       hasMore={hasMore}
       loader={<h4>Loading...</h4>}
@@ -62,7 +47,7 @@ export default function GalleryContainer({
         </p>
       }
     >
-      {imgListPortions.map((image) => (
+      {items.map((image) => (
         <ImageListItem
           key={image.id}
           sx={{

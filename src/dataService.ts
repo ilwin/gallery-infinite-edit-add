@@ -1,16 +1,13 @@
-import ImageItemProps from "./types/ImageItemProps";
+import ItemProps from "./types/ItemProps";
 
 export function getImages() {
   return getData("https://jsonplaceholder.typicode.com/photos").then((result) =>
-    buildObject(result as ImageItemProps[])
+    buildObject(result as ItemProps[])
   );
 }
 
-function buildObject(imagesFetched: ImageItemProps[]) {
-  let images: Record<number, ImageItemProps> = {} as Record<
-    number,
-    ImageItemProps
-  >;
+function buildObject(imagesFetched: ItemProps[]) {
+  let images: Record<number, ItemProps> = {} as Record<number, ItemProps>;
   imagesFetched.forEach((image) =>
     Object.assign(images, { [image.id]: image })
   );

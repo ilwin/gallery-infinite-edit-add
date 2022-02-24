@@ -1,9 +1,9 @@
-import ImageItemProps from "../types/ImageItemProps";
+import ItemProps from "../types/ItemProps";
 
 const updateTitle = (
-  id: ImageItemProps["id"],
+  id: ItemProps["id"],
   updatedTitle: string,
-  imageList: ImageItemProps[]
+  imageList: ItemProps[]
 ) => {
   const itemToUpdate = imageList.find((image) => image.id === id);
   if (itemToUpdate) {

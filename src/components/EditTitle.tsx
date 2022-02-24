@@ -3,8 +3,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-import ImageItemProps from "../types/ImageItemProps";
-import { Input, TextField } from "@mui/material";
+import ItemProps from "../types/ItemProps";
+import { TextField } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -23,14 +23,14 @@ const style = {
 interface EditTitleProps {
   open: boolean;
   handleModalClose: (title: string) => void;
-  imageItem: ImageItemProps;
+  item: ItemProps;
 }
 
-const EditTitle = ({ open, imageItem, handleModalClose }: EditTitleProps) => {
-  const [title, setTitle] = useState(imageItem.title);
+const EditTitle = ({ open, item, handleModalClose }: EditTitleProps) => {
+  const [title, setTitle] = useState(item.title);
   useEffect(() => {
-    setTitle(imageItem.title);
-  }, [imageItem.title]);
+    setTitle(item.title);
+  }, [item.title]);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
@@ -50,14 +50,14 @@ const EditTitle = ({ open, imageItem, handleModalClose }: EditTitleProps) => {
             sx={{ m: 1 }}
             disabled={!title}
             onClick={() => handleModalClose(title)}
-            variant={imageItem.title === title ? "outlined" : "contained"}
+            variant={item.title === title ? "outlined" : "contained"}
             color="success"
           >
             Save
           </Button>
           <Button
             sx={{ m: 1 }}
-            onClick={() => handleModalClose(imageItem.title)}
+            onClick={() => handleModalClose(item.title)}
             variant="outlined"
             color="secondary"
           >
