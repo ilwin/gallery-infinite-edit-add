@@ -34,10 +34,12 @@ const Main = () => {
 
   return (
     <div>
-      <GalleryContainer
-        images={images}
-        handleItemTitleClick={handleItemTitleClick}
-      />
+      {Object.keys(images).length > 0 && (
+        <GalleryContainer
+          images={images}
+          handleItemTitleClick={handleItemTitleClick}
+        />
+      )}
       {editedImage && (
         <EditTitle
           isTitleEdit={isTitleEdit}
