@@ -90,14 +90,15 @@ const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
             sx={{ m: 1 }}
             disabled={!formInput.title || !isValidURL(formInput.url)}
             onClick={() => handleModalClose(formInput)}
-            variant="outlined"
+            variant="contained"
+            color="primary"
           >
             Save
           </Button>
           <Button
             sx={{ m: 1 }}
             onClick={() => handleModalClose(item)}
-            variant="outlined"
+            variant="contained"
             color="secondary"
           >
             Cancel

@@ -3,11 +3,13 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ItemProps from "../types/ItemProps";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { styled, Tooltip } from "@mui/material";
+import { styled } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 interface GalleryContainerProps {
   items: ItemProps[];
-  handleItemTitleClick: (id: number) => void;
+  showMenu: (id: number) => void;
   fetchMoreData: () => void;
   hasMore: boolean;
   imgWidth?: number;
@@ -19,15 +21,18 @@ const ImageTitle = styled("p")({
   overflowWrap: "anywhere",
   fontSize: 20,
   fontFamily: "fantasy",
-  cursor: "pointer",
-  "&:hover": {
-    textDecoration: "underline",
-  },
+});
+
+const ItemMenu = styled("div")({
+  position: "absolute",
+  bottom: 70,
+  right: 10,
+  opacity: 50,
 });
 
 export default function GalleryContainer({
   items,
-  handleItemTitleClick,
+  showMenu,
   fetchMoreData,
   hasMore,
   imgWidth = 600,
@@ -53,26 +58,45 @@ export default function GalleryContainer({
       }
     >
       {items.map((image) => (
-        <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
-          <ImageListItem
-            key={image.id}
+        <ImageListItem
+          key={image.id}
+          sx={{
+            width: 600,
+            border: "3px solid gray",
+            padding: 1,
+            margin: 1,
+            "&:hover .itemMenu": {
+              display: "flex",
+            },
+          }}
+        >
+          <LazyLoadImage
+            src={`${image.url}`}
+            width={imgWidth}
+            height={imgHeight}
+          />
+          <ImageTitle>{image.title}</ImageTitle>
+          <ItemMenu
             sx={{
-              width: 600,
-              border: "3px solid gray",
+              display: "none",
+              flexDirection: "column",
+              opacity: "30%",
+              backgroundColor: "white",
               padding: 1,
-              margin: 1,
             }}
+            className="itemMenu"
           >
-            <LazyLoadImage
-              src={`${image.url}`}
-              width={imgWidth}
-              height={imgHeight}
+            <DeleteOutlineIcon
+              sx={{ color: "#FF0000", cursor: "pointer" }}
+              fontSize="large"
             />
-            <ImageTitle onClick={() => handleItemTitleClick(image.id)}>
-              {image.title}
-            </ImageTitle>
-          </ImageListItem>
-        </Tooltip>
+            <EditIcon
+              onClick={() => showMenu(image.id)}
+              fontSize="large"
+              sx={{ cursor: "pointer" }}
+            />
+          </ItemMenu>
+        </ImageListItem>
       ))}
     </InfiniteScroll>
   );

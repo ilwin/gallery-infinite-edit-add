@@ -25,10 +25,6 @@ const Main = () => {
     );
   }, [items]);
 
-  const handleItemTitleClick = (id: number) => {
-    setEditItemId(id);
-  };
-
   const handleModalClose = (item: ItemProps) => {
     setItems({
       ...items,
@@ -60,7 +56,7 @@ const Main = () => {
       {hasItems && (
         <GalleryContainer
           items={visibleItems}
-          handleItemTitleClick={handleItemTitleClick}
+          showMenu={setEditItemId}
           fetchMoreData={fetchMoreDataScrolling}
           hasMore={hasMoreScrolling}
         />
