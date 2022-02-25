@@ -9,7 +9,9 @@ export function getImages() {
 function buildObject(imagesFetched: ItemProps[]) {
   let images: Record<number, ItemProps> = {} as Record<number, ItemProps>;
   imagesFetched.forEach((image) =>
-    Object.assign(images, { [image.id]: image })
+    Object.assign(images, {
+      [String(image.id)]: { ...image, id: String(image.id) },
+    })
   );
   return images;
 }

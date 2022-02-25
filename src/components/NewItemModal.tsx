@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
 
 import ItemProps from "../types/ItemProps";
 import { isValidURL } from "../helpers";
@@ -12,7 +13,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -21,14 +22,17 @@ const style = {
   flexDirection: "column",
 };
 
-interface EditItemModalProps {
+interface NewIemModalProps {
   open: boolean;
-  updateItem: (item: ItemProps) => void;
-  item: ItemProps;
+  addItem: (item: ItemProps) => void;
 }
 
-const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
-  const [formInput, setFormInput] = useState<ItemProps>(item);
+const NewItemModal = ({ open, addItem }: NewIemModalProps) => {
+  const [formInput, setFormInput] = useState<ItemProps>({
+    id: uuidv4(),
+    title: "Look at my eyes",
+    url: "https://picsum.photos/id/237/200/300",
+  });
   const handleInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const name = evt.target.name;
     const newValue = evt.target.value;
@@ -37,14 +41,12 @@ const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
 
   const onSubmit = () => {
     if (isValidURL(formInput.url) && formInput.title) {
-      updateItem(formInput);
-    } else {
-      updateItem(item);
+      addItem(formInput);
     }
   };
 
   return (
-    <Modal open={open} onClose={() => updateItem(item)}>
+    <Modal open={open}>
       <Box component="form" sx={style}>
         <TextField
           disabled
@@ -81,7 +83,7 @@ const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
         />
         <Box sx={{ display: "flex", justifyContent: "right", mt: 1 }}>
           <Button
-            sx={{ m: 1, textTransform: "none" }}
+            sx={{ m: 1 }}
             disabled={!formInput.title || !isValidURL(formInput.url)}
             onClick={onSubmit}
             variant="contained"
@@ -89,12 +91,7 @@ const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
           >
             Save
           </Button>
-          <Button
-            sx={{ m: 1, textTransform: "none" }}
-            onClick={() => updateItem(item)}
-            variant="contained"
-            color="secondary"
-          >
+          <Button sx={{ m: 1 }} variant="contained" color="secondary">
             Cancel
           </Button>
         </Box>
@@ -103,4 +100,4 @@ const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
   );
 };
 
-export default EditItemModal;
+export default NewItemModal;

@@ -1,7 +1,7 @@
 export default interface ItemProps {
-  albumId: number;
-  id: number;
+  albumId?: number;
+  id: number | string;
   title: string;
   url: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
 }

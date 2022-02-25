@@ -6,7 +6,7 @@ import GalleryContainer from "./GalleryContainer";
 import EditItemModal from "./EditItemModal";
 
 const Main = () => {
-  const [items, setItems] = useState<Record<number, ItemProps>>(
+  const [items, setItems] = useState<Record<string, ItemProps>>(
     {} as Record<number, ItemProps>
   );
   const [visibleItems, setVisibleItems] = useState<ItemProps[]>([]);
