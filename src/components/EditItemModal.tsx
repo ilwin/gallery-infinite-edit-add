@@ -22,7 +22,7 @@ const style = {
 
 interface EditTitleProps {
   open: boolean;
-  handleModalClose: (item: ItemProps) => void;
+  updateItem: (item: ItemProps) => void;
   item: ItemProps;
 }
 
@@ -33,7 +33,7 @@ function isValidURL(string: string) {
   return res !== null;
 }
 
-const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
+const EditItemModal = ({ open, item, updateItem }: EditTitleProps) => {
   const [formInput, setFormInput] = useState<ItemProps>(item);
   const handleInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const name = evt.target.name;
@@ -41,16 +41,16 @@ const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
     setFormInput({ ...formInput, [name]: newValue });
   };
 
-  const validateOnClose = () => {
+  const onSubmit = () => {
     if (isValidURL(formInput.url) && formInput.title) {
-      handleModalClose(formInput);
+      updateItem(formInput);
     } else {
-      handleModalClose(item);
+      updateItem(item);
     }
   };
 
   return (
-    <Modal open={open} onClose={validateOnClose}>
+    <Modal open={open} onClose={() => updateItem(item)}>
       <Box component="form" sx={style}>
         <TextField
           disabled
@@ -89,7 +89,7 @@ const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
           <Button
             sx={{ m: 1 }}
             disabled={!formInput.title || !isValidURL(formInput.url)}
-            onClick={() => handleModalClose(formInput)}
+            onClick={onSubmit}
             variant="contained"
             color="primary"
           >
@@ -97,7 +97,7 @@ const EditItemModal = ({ open, item, handleModalClose }: EditTitleProps) => {
           </Button>
           <Button
             sx={{ m: 1 }}
-            onClick={() => handleModalClose(item)}
+            onClick={() => updateItem(item)}
             variant="contained"
             color="secondary"
           >

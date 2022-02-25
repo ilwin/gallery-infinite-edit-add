@@ -9,7 +9,8 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 interface GalleryContainerProps {
   items: ItemProps[];
-  showMenu: (id: number) => void;
+  onClickEdit: (item: ItemProps) => void;
+  removeItem: (item: ItemProps) => void;
   fetchMoreData: () => void;
   hasMore: boolean;
   imgWidth?: number;
@@ -25,14 +26,15 @@ const ImageTitle = styled("p")({
 
 const ItemMenu = styled("div")({
   position: "absolute",
-  bottom: 70,
+  top: 10,
   right: 10,
   opacity: 50,
 });
 
 export default function GalleryContainer({
   items,
-  showMenu,
+  onClickEdit,
+  removeItem,
   fetchMoreData,
   hasMore,
   imgWidth = 600,
@@ -57,9 +59,9 @@ export default function GalleryContainer({
         </p>
       }
     >
-      {items.map((image) => (
+      {items.map((item) => (
         <ImageListItem
-          key={image.id}
+          key={item.id}
           sx={{
             width: 600,
             border: "3px solid gray",
@@ -71,11 +73,11 @@ export default function GalleryContainer({
           }}
         >
           <LazyLoadImage
-            src={`${image.url}`}
+            src={`${item.url}`}
             width={imgWidth}
             height={imgHeight}
           />
-          <ImageTitle>{image.title}</ImageTitle>
+          <ImageTitle>{`${item.id} - ${item.title}`}</ImageTitle>
           <ItemMenu
             sx={{
               display: "none",
@@ -89,9 +91,10 @@ export default function GalleryContainer({
             <DeleteOutlineIcon
               sx={{ color: "#FF0000", cursor: "pointer" }}
               fontSize="large"
+              onClick={() => removeItem(item)}
             />
             <EditIcon
-              onClick={() => showMenu(image.id)}
+              onClick={() => onClickEdit(item)}
               fontSize="large"
               sx={{ cursor: "pointer" }}
             />

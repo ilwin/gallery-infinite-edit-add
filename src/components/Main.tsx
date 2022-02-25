@@ -10,9 +10,9 @@ const Main = () => {
     {} as Record<number, ItemProps>
   );
   const [visibleItems, setVisibleItems] = useState<ItemProps[]>([]);
-  const onScrollUploadCount = 10;
+  const onScrollUploadCount = 5;
   const [offset, setOffset] = useState(0);
-  const [editItemId, setEditItemId] = useState<number | null>(null);
+  const [editItem, setEditItem] = useState<ItemProps | null>(null);
   const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
 
   useEffect(() => {
@@ -21,16 +21,25 @@ const Main = () => {
 
   useEffect(() => {
     setVisibleItems(
-      Object.values(items).slice(offset, offset + onScrollUploadCount)
+      Object.values(items).slice(0, offset + onScrollUploadCount)
     );
   }, [items]);
 
-  const handleModalClose = (item: ItemProps) => {
+  const onClickEdit = (item: ItemProps) => {
+    setEditItem(item);
+  };
+
+  const updateItem = (item: ItemProps) => {
     setItems({
       ...items,
       [item.id]: { ...item },
     });
-    setEditItemId(null);
+    setEditItem(null);
+  };
+
+  const removeItem = (itemToRemove: ItemProps) => {
+    delete items[itemToRemove.id];
+    setItems({ ...items });
   };
 
   const hasItems = useMemo(() => Object.keys(items).length > 0, [items]);
@@ -56,16 +65,17 @@ const Main = () => {
       {hasItems && (
         <GalleryContainer
           items={visibleItems}
-          showMenu={setEditItemId}
+          onClickEdit={onClickEdit}
           fetchMoreData={fetchMoreDataScrolling}
           hasMore={hasMoreScrolling}
+          removeItem={removeItem}
         />
       )}
-      {editItemId && (
+      {editItem && (
         <EditItemModal
           open={true}
-          handleModalClose={handleModalClose}
-          item={items[editItemId]}
+          updateItem={updateItem}
+          item={items[editItem.id]}
         />
       )}
     </div>
