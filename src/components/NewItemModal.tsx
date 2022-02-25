@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import ItemProps from "../types/ItemProps";
 import { isValidURL } from "../helpers";
+import { isValidPropValue } from "../helpers";
+import { isValid } from "../helpers";
 
 const style = {
   position: "absolute",
@@ -29,9 +31,10 @@ interface NewIemModalProps {
   open: boolean;
   addItem: (item: ItemProps) => void;
   onClose: () => void;
+  items: ItemProps[];
 }
 
-const NewItemModal = ({ open, addItem, onClose }: NewIemModalProps) => {
+const NewItemModal = ({ open, addItem, onClose, items }: NewIemModalProps) => {
   const [formInput, setFormInput] = useState<ItemProps>({
     id: uuidv4(),
     title: "Look at my eyes",
@@ -43,10 +46,16 @@ const NewItemModal = ({ open, addItem, onClose }: NewIemModalProps) => {
     setFormInput({ ...formInput, [name]: newValue });
   };
 
+  const isValidTitle =
+    !!formInput.title && isValidPropValue("title", formInput.title, items);
+  const isValidURL = isValidPropValue("url", formInput.url, items);
+  const isValidFormFields = isValid(formInput, ["title", "url"], items);
+
   const onSubmit = () => {
-    if (isValidURL(formInput.url) && formInput.title) {
+    if (isValidFormFields) {
       addItem(formInput);
     }
+    onClose();
   };
 
   return (
@@ -63,7 +72,10 @@ const NewItemModal = ({ open, addItem, onClose }: NewIemModalProps) => {
         />
         <TextField
           id="standard-title"
-          error={!formInput.title}
+          error={!isValidTitle}
+          helperText={
+            isValidTitle ? "" : "The title is empty or already exists"
+          }
           name="title"
           label="Title"
           value={formInput.title}
@@ -75,7 +87,10 @@ const NewItemModal = ({ open, addItem, onClose }: NewIemModalProps) => {
         />
         <TextField
           id="standard-url"
-          error={!isValidURL(formInput.url)}
+          error={!isValidURL}
+          helperText={
+            isValidURL ? "" : "The URL is empty/incorrect/already exists"
+          }
           name="url"
           label="URL"
           value={formInput.url}
@@ -89,7 +104,7 @@ const NewItemModal = ({ open, addItem, onClose }: NewIemModalProps) => {
         <Box sx={{ display: "flex", justifyContent: "right", mt: 1 }}>
           <Button
             sx={{ m: 1 }}
-            disabled={!formInput.title || !isValidURL(formInput.url)}
+            disabled={!isValid(formInput, ["title", "url"], items)}
             onClick={onSubmit}
             variant="contained"
             color="primary"

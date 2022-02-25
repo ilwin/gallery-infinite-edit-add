@@ -88,6 +88,7 @@ const Main = () => {
           open={true}
           addItem={addItem}
           onClose={() => setIsAddItem(false)}
+          items={items}
         />
       )}
     </div>

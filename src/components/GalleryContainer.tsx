@@ -20,10 +20,18 @@ interface GalleryContainerProps {
 }
 
 const ImageTitle = styled("p")({
-  lineHeight: 1,
+  lineHeight: 0,
   overflowWrap: "anywhere",
   fontSize: 20,
   fontFamily: "fantasy",
+});
+
+const ImageID = styled("p")({
+  lineHeight: 0,
+  overflowWrap: "anywhere",
+  fontSize: 10,
+  fontFamily: "fantasy",
+  color: "#aaaaaa",
 });
 
 const ItemMenu = styled("div")({
@@ -81,7 +89,8 @@ export default function GalleryContainer({
               width={imgWidth}
               height={imgHeight}
             />
-            <ImageTitle>{`${item.id} - ${item.title}`}</ImageTitle>
+            <ImageID>{item.id}</ImageID>
+            <ImageTitle>{item.title}</ImageTitle>
             <ItemMenu
               sx={{
                 display: "none",
