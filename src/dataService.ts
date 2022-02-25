@@ -1,9 +1,9 @@
 import ItemProps from "./types/ItemProps";
 
 export function getImages() {
-  return getData("https://jsonplaceholder.typicode.com/photos").then((result) =>
-    buildObject(result as ItemProps[])
-  );
+  return getData("https://jsonplaceholder.typicode.com/photos");
+  // .then((result) => buildObject(result as ItemProps[])
+  // );
 }
 
 function buildObject(imagesFetched: ItemProps[]) {

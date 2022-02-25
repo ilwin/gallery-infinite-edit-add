@@ -4,19 +4,20 @@ import ItemProps from "../types/ItemProps";
 import { getImages } from "../dataService";
 import GalleryContainer from "./GalleryContainer";
 import EditItemModal from "./EditItemModal";
+import NewItemModal from "./NewItemModal";
+import { findIndex } from "../helpers";
 
 const Main = () => {
-  const [items, setItems] = useState<Record<string, ItemProps>>(
-    {} as Record<number, ItemProps>
-  );
+  const [items, setItems] = useState<ItemProps[]>([]);
   const [visibleItems, setVisibleItems] = useState<ItemProps[]>([]);
   const onScrollUploadCount = 5;
   const [offset, setOffset] = useState(0);
   const [editItem, setEditItem] = useState<ItemProps | null>(null);
+  const [isAddItem, setIsAddItem] = useState(false);
   const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
 
   useEffect(() => {
-    getImages().then((result) => setItems(result));
+    getImages().then((result) => setItems(result as ItemProps[]));
   }, []);
 
   useEffect(() => {
@@ -30,16 +31,19 @@ const Main = () => {
   };
 
   const updateItem = (item: ItemProps) => {
-    setItems({
-      ...items,
-      [item.id]: { ...item },
-    });
+    const itemIndex = findIndex(item, items);
+    items[itemIndex] = item;
+    setItems([...items]);
     setEditItem(null);
   };
 
-  const removeItem = (itemToRemove: ItemProps) => {
-    delete items[itemToRemove.id];
-    setItems({ ...items });
+  const removeItem = (item: ItemProps) => {
+    const itemIndex = findIndex(item, items);
+    setItems({ ...items.splice(itemIndex, 1) });
+  };
+
+  const addItem = (item: ItemProps) => {
+    setItems([item].concat(items));
   };
 
   const hasItems = useMemo(() => Object.keys(items).length > 0, [items]);
@@ -69,13 +73,21 @@ const Main = () => {
           fetchMoreData={fetchMoreDataScrolling}
           hasMore={hasMoreScrolling}
           removeItem={removeItem}
+          onClickAddItem={() => setIsAddItem(true)}
         />
       )}
       {editItem && (
         <EditItemModal
           open={true}
           updateItem={updateItem}
-          item={items[editItem.id]}
+          item={items[findIndex(editItem, items)]}
+        />
+      )}
+      {isAddItem && (
+        <NewItemModal
+          open={true}
+          addItem={addItem}
+          onClose={() => setIsAddItem(false)}
         />
       )}
     </div>

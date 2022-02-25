@@ -12,6 +12,7 @@ interface GalleryContainerProps {
   items: ItemProps[];
   onClickEdit: (item: ItemProps) => void;
   removeItem: (item: ItemProps) => void;
+  onClickAddItem: () => void;
   fetchMoreData: () => void;
   hasMore: boolean;
   imgWidth?: number;
@@ -36,6 +37,7 @@ export default function GalleryContainer({
   items,
   onClickEdit,
   removeItem,
+  onClickAddItem,
   fetchMoreData,
   hasMore,
   imgWidth = 600,
@@ -115,6 +117,7 @@ export default function GalleryContainer({
         }}
         variant="contained"
         endIcon={<AddPhotoAlternateIcon fontSize="large" />}
+        onClick={onClickAddItem}
       >
         {"Add Item"}
       </Button>
