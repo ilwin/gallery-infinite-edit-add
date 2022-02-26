@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -84,7 +84,7 @@ const NewItemModal = ({ open, addItem, onClose, items }: NewIemModalProps) => {
         />
         <Url error={!isValidURL} value={formInput.url} onChange={handleInput} />
 
-        <img src={`${formInput.url}`} width="80%" />
+        <img src={`${formInput.url}`} width="80%" alt="" />
         <Box sx={{ display: "flex", justifyContent: "right", mt: 1 }}>
           <Button
             sx={{ m: 1 }}

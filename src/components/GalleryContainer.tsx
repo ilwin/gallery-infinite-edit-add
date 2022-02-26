@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ImageListItem from "@mui/material/ImageListItem";
 import ItemProps from "../types/ItemProps";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -88,6 +88,7 @@ export default function GalleryContainer({
               src={`${item.url}`}
               width={imgWidth}
               height={imgHeight}
+              alt=""
             />
             <ImageID>{item.id}</ImageID>
             <ImageTitle>{item.title}</ImageTitle>

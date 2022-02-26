@@ -26,7 +26,7 @@ const Main = () => {
     setVisibleItems(
       Object.values(items).slice(0, offset + onScrollUploadCount)
     );
-  }, [items]);
+  }, [items, offset, onScrollUploadCount]);
 
   const onClickEdit = (item: ItemProps) => {
     setEditItem(item);
