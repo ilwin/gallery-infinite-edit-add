@@ -82,6 +82,7 @@ const Main = () => {
           open={true}
           updateItem={updateItem}
           item={items[findIndex(editItem, items)]}
+          items={items}
         />
       )}
       {isAddItem && (

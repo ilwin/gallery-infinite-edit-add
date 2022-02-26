@@ -5,7 +5,10 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 
 import ItemProps from "../types/ItemProps";
-import { isValidURL } from "../helpers";
+import { isValidPropValue } from "../helpers";
+import { isValid } from "../helpers";
+import Title from "./Title";
+import Url from "./Url";
 
 const style = {
   position: "absolute",
@@ -25,9 +28,15 @@ interface EditItemModalProps {
   open: boolean;
   updateItem: (item: ItemProps) => void;
   item: ItemProps;
+  items: ItemProps[];
 }
 
-const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
+const EditItemModal = ({
+  open,
+  item,
+  updateItem,
+  items,
+}: EditItemModalProps) => {
   const [formInput, setFormInput] = useState<ItemProps>(item);
   const handleInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const name = evt.target.name;
@@ -35,8 +44,19 @@ const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
     setFormInput({ ...formInput, [name]: newValue });
   };
 
+  const isValidTitle =
+    !!formInput.title &&
+    isValidPropValue(formInput.id, "title", formInput.title, items);
+  const isValidURL = isValidPropValue(
+    formInput.id,
+    "url",
+    formInput.url,
+    items
+  );
+  const isValidFormFields = isValid(formInput, ["title", "url"], items);
+
   const onSubmit = () => {
-    if (isValidURL(formInput.url) && formInput.title) {
+    if (isValidFormFields) {
       updateItem(formInput);
     } else {
       updateItem(item);
@@ -55,34 +75,16 @@ const EditItemModal = ({ open, item, updateItem }: EditItemModalProps) => {
           variant="standard"
           margin="normal"
         />
-        <TextField
-          id="standard-title"
-          error={!formInput.title}
-          name="title"
-          label="Title"
+        <Title
+          error={!isValidTitle}
           value={formInput.title}
-          multiline
           onChange={handleInput}
-          variant="standard"
-          fullWidth
-          margin="normal"
         />
-        <TextField
-          id="standard-url"
-          error={!isValidURL(formInput.url)}
-          name="url"
-          label="URL"
-          value={formInput.url}
-          multiline
-          variant="standard"
-          onChange={handleInput}
-          margin="normal"
-          fullWidth
-        />
+        <Url error={!isValidURL} value={formInput.url} onChange={handleInput} />
         <Box sx={{ display: "flex", justifyContent: "right", mt: 1 }}>
           <Button
-            sx={{ m: 1, textTransform: "none" }}
-            disabled={!formInput.title || !isValidURL(formInput.url)}
+            sx={{ m: 1 }}
+            disabled={!isValid(formInput, ["title", "url"], items)}
             onClick={onSubmit}
             variant="contained"
             color="primary"

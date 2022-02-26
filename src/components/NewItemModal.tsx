@@ -6,7 +6,8 @@ import { TextField } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 
 import ItemProps from "../types/ItemProps";
-import { isValidURL } from "../helpers";
+import Title from "./Title";
+import Url from "./Url";
 import { isValidPropValue } from "../helpers";
 import { isValid } from "../helpers";
 
@@ -76,36 +77,13 @@ const NewItemModal = ({ open, addItem, onClose, items }: NewIemModalProps) => {
           variant="standard"
           margin="normal"
         />
-        <TextField
-          id="standard-title"
+        <Title
           error={!isValidTitle}
-          helperText={
-            isValidTitle ? "" : "The title is empty or already exists"
-          }
-          name="title"
-          label="Title"
           value={formInput.title}
-          multiline
           onChange={handleInput}
-          variant="standard"
-          fullWidth
-          margin="normal"
         />
-        <TextField
-          id="standard-url"
-          error={!isValidURL}
-          helperText={
-            isValidURL ? "" : "The URL is empty/incorrect/already exists"
-          }
-          name="url"
-          label="URL"
-          value={formInput.url}
-          multiline
-          variant="standard"
-          onChange={handleInput}
-          margin="normal"
-          fullWidth
-        />
+        <Url error={!isValidURL} value={formInput.url} onChange={handleInput} />
+
         <img src={`${formInput.url}`} width="80%" />
         <Box sx={{ display: "flex", justifyContent: "right", mt: 1 }}>
           <Button
