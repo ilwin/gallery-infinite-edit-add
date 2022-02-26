@@ -3,8 +3,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import ItemProps from "../types/ItemProps";
 import { getImages } from "../dataService";
 import GalleryContainer from "./GalleryContainer";
-import EditItemModal from "./EditItemModal";
-import NewItemModal from "./NewItemModal";
+import EditItemModal from "./Modals/EditItemModal";
+import NewItemModal from "./Modals/NewItemModal";
 import { findIndex } from "../helpers";
 
 const Main = () => {

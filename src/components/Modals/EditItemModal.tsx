@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 
-import ItemProps from "../types/ItemProps";
-import { isValidPropValue } from "../helpers";
-import { isValid } from "../helpers";
+import ItemProps from "../../types/ItemProps";
+import { isValidPropValue } from "../../helpers";
+import { isValid } from "../../helpers";
 import Title from "./Title";
 import Url from "./Url";
 

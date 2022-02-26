@@ -5,11 +5,11 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 
-import ItemProps from "../types/ItemProps";
+import ItemProps from "../../types/ItemProps";
 import Title from "./Title";
 import Url from "./Url";
-import { isValidPropValue } from "../helpers";
-import { isValid } from "../helpers";
+import { isValidPropValue } from "../../helpers";
+import { isValid } from "../../helpers";
 
 const style = {
   position: "absolute",
