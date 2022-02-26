@@ -12,6 +12,7 @@ export function findIndex(item: ItemProps, items: ItemProps[]) {
 }
 
 function isUniquePropValue(
+  itemId: string,
   prop: keyof ItemProps,
   propValue: string,
   items: ItemProps[]
@@ -19,12 +20,14 @@ function isUniquePropValue(
   return (
     items.filter(
       (currItem) =>
-        String(propValue).toLowerCase() === String(currItem[prop]).toLowerCase()
+        String(propValue).toLowerCase() ===
+          String(currItem[prop]).toLowerCase() && itemId !== currItem.id
     ).length === 0
   );
 }
 
 export function isValidPropValue(
+  itemId: string,
   prop: keyof ItemProps,
   propValue: string,
   items: ItemProps[]
@@ -35,9 +38,12 @@ export function isValidPropValue(
 
   switch (prop) {
     case "title":
-      return isUniquePropValue(prop, propValue, items);
+      return isUniquePropValue(itemId, prop, propValue, items);
     case "url":
-      return isValidURL(propValue) && isUniquePropValue(prop, propValue, items);
+      return (
+        isValidURL(propValue) &&
+        isUniquePropValue(itemId, prop, propValue, items)
+      );
     default:
       return true;
   }
@@ -56,6 +62,7 @@ export function isValid(item: ItemProps, fields: string[], items: ItemProps[]) {
 
     if (
       !isValidPropValue(
+        item.id,
         key as keyof ValidationProps,
         item[key as keyof ValidationProps],
         items

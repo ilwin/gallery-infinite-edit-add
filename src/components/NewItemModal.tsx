@@ -47,8 +47,14 @@ const NewItemModal = ({ open, addItem, onClose, items }: NewIemModalProps) => {
   };
 
   const isValidTitle =
-    !!formInput.title && isValidPropValue("title", formInput.title, items);
-  const isValidURL = isValidPropValue("url", formInput.url, items);
+    !!formInput.title &&
+    isValidPropValue(formInput.id, "title", formInput.title, items);
+  const isValidURL = isValidPropValue(
+    formInput.id,
+    "url",
+    formInput.url,
+    items
+  );
   const isValidFormFields = isValid(formInput, ["title", "url"], items);
 
   const onSubmit = () => {

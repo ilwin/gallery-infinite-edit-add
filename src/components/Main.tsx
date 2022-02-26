@@ -39,7 +39,8 @@ const Main = () => {
 
   const removeItem = (item: ItemProps) => {
     const itemIndex = findIndex(item, items);
-    setItems({ ...items.splice(itemIndex, 1) });
+    items.splice(itemIndex, 1);
+    setItems([...items]);
   };
 
   const addItem = (item: ItemProps) => {
