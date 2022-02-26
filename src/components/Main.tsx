@@ -18,7 +18,7 @@ const Main = () => {
 
   useEffect(() => {
     getImages("https://jsonplaceholder.typicode.com/photos").then((result) =>
-      setItems(result as ItemProps[])
+      setItems((result as ItemProps[]).slice(0, 100))
     );
   }, []);
 
