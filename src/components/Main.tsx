@@ -17,9 +17,8 @@ const Main = () => {
   const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
 
   useEffect(() => {
-    getImages("https://jsonplaceholder.typicode.com/photos").then(
-      // (result) => setItems(result as ItemProps[])
-      (result) => setItems([] as ItemProps[])
+    getImages("https://jsonplaceholder.typicode.com/photos").then((result) =>
+      setItems(result as ItemProps[])
     );
   }, []);
 
